@@ -94,7 +94,7 @@ body {
   position: absolute;
   z-index: 5;
   left: 50%;
-  top: 91px;
+  top: 60%;
   transform: translate(-50%, 0);
 
   background-color: white;
@@ -127,7 +127,6 @@ body {
   padding-left: 30px;
 
   width: 25%;
-
 }
 
 .items-inf-item:last-child {
