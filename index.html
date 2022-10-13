@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP Tracking</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.0/dist/leaflet.css"
+    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="tracking-main">
+      <p class="tracking-label">IP Address Tracker</p>
+
+      <div class="tracking-search-container">
+        <input type="text" class="tracking-inputip">
+        <button class="tracking-inputip-arrow"></button>
+      </div>
+
+      <div class="tracking-view">
+        <div class="items-inf">
+          <div class="items-inf-item">
+            <p class="items-inf-item__label">IP ADDRESS</p>
+            <p class="items-inf-item__value items-inf-item__valueIP">IP ADDRESS</p>
+          </div>
+
+          <div class="items-inf-item">
+            <p class="items-inf-item__label">LOCATION</p>
+            <p class="items-inf-item__value items-inf-item__valueLoc">LOCATION</p>
+          </div>
+
+          <div class="items-inf-item">
+            <p class="items-inf-item__label">TIMEZONE</p>
+            <p class="items-inf-item__value items-inf-item__valuetime">TIMEZONE</p>
+          </div>
+
+          <div class="items-inf-item">
+            <p class="items-inf-item__label">ISP</p>
+            <p class="items-inf-item__value items-inf-item__valueisp">ISP</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tracking-map">
+      <div id="map">
+
+      </div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.0/dist/leaflet.js"
+      integrity="sha256-oH+m3EWgtpoAmoBO/v+u8H/AdwB/54Gc/SgqjUKbb4Y=" crossorigin="">
+      </script>
+
+    <script>
+      const MAXLENGTHISP = 30;
+      const CHARACTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+
+      const url = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_DVj0u0PpoLuPPm9hlM9if7OwIsZVY';
+      const map = L.map('map');
+
+      const myIcon = L.icon({
+        iconUrl: 'images/icon-location.svg',
+        iconSize: [25, 34],
+      });
+
+      function locationByIp(url) {
+        const getIP = fetch(url);
+
+        getIP
+          .then(
+            result => {
+              const getIpJson = result.json();
+              return getIpJson;
+            },
+            error => {
+              return alert("Rejected: " + error);
+            }
+          ).then(
+            getIpJson => {
+              console.log(getIpJson);
+              console.log(getIpJson.ip);
+              const currentIp = getIpJson.ip;
+              const lat = getIpJson.location.lat;
+              const lng = getIpJson.location.lng;
+              const location = getIpJson.location.city + ', ' + getIpJson.location.country + ' ' + getIpJson.location.postalCode;
+              const timeZone = 'UTC ' + getIpJson.location.timezone;
+              const isp = getIpJson.isp;
+
+              const viewIp = document.querySelector('.tracking-inputip');
+              viewIp.placeholder = currentIp;
+
+              const itemIP = document.querySelector('.items-inf-item__valueIP');
+              itemIP.innerHTML = currentIp;
+
+              const itemLoc = document.querySelector('.items-inf-item__valueLoc');
+              itemLoc.innerHTML = location;
+
+              const itemTime = document.querySelector('.items-inf-item__valuetime');
+              itemTime.innerHTML = timeZone;
+
+              if (isp.length > MAXLENGTHISP) {
+                console.log(isp.length);
+                document.querySelector('.items-inf-item__valueisp').style = "font-size: 10px";
+              } else {
+                document.querySelector('.items-inf-item__valueisp').style = "font-size: 18px";
+              }
+
+              const itemISP = document.querySelector('.items-inf-item__valueisp');
+              itemISP.innerHTML = isp;
+
+              map.setView([lat, lng], 13);
+              //const marker = L.marker([lat, lng]).addTo(map);
+
+              L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+              }).addTo(map);
+
+              L.marker([lat, lng], { icon: myIcon }).addTo(map);
+
+            }
+          )
+      }
+
+      locationByIp(url);
+
+      document.querySelector('.tracking-inputip-arrow').addEventListener('click', event => {
+        const currentIp = document.querySelector('.tracking-inputip').value;
+        const characterCount = currentIp.length;
+
+        for (let i = 0; i <= characterCount; i++) {
+          let valueTemp = currentIp.substr(i, 1);
+
+          if (!CHARACTERS.includes(valueTemp)) {
+            return alert('Enter only numbers for IP address!');
+          }
+        }
+
+        const url = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_DVj0u0PpoLuPPm9hlM9if7OwIsZVY&ipAddress=' + currentIp;
+
+        locationByIp(url);
+      });
+
+    </script>
+</body>
+
+</html>

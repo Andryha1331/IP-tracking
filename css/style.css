@@ -1,0 +1,156 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+
+  margin: 0 auto;
+
+  position: relative;
+}
+
+.tracking-main {
+  width: 100%;
+  height: 30%;
+
+  background: url(../images/pattern-bg.png);
+
+  position: relative;
+}
+
+#map {
+  height: 450px;
+}
+
+.tracking-map {
+  position: relative;
+  z-index: 1;
+}
+
+.tracking-label {
+  color: white;
+  font-family: 'Rubik';
+  margin: 0;
+
+  text-align: center;
+  padding: 20px 0;
+}
+
+.tracking-search-container {
+  text-align: center;
+
+  height: 35px;
+
+  max-width: 400px;
+  margin: 0 auto;
+
+  margin-top: -10px;
+}
+
+.tracking-inputip {
+  width: 90%;
+  border-radius: 5px 0px 0px 5px;
+  border-color: white;
+
+  height: 100%;
+  text-align: center;
+}
+
+.tracking-inputip-arrow {
+  width: 35px;
+  height: 100%;
+
+  background: url(../images/icon-arrow.svg);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  left: -4px;
+  top: 11px;
+
+  border-radius: 0px 5px 5px 0px;
+}
+
+.tracking-inputip-arrow:hover {
+  cursor: pointer;
+}
+
+.tracking-view {
+  height: 85px;
+  width: 70%;
+
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 91px;
+  transform: translate(-50%, 0);
+
+  background-color: white;
+
+  margin: 0 auto;
+  margin-top: 15px;
+
+  border-radius: 5px;
+
+  padding-top: 20px;
+
+}
+
+.tracking-view-items {
+  display: flex;
+  padding: 0 30px;
+
+  list-style-type: none;
+  justify-content: space-between;
+}
+
+.tracking-view-items__item:not(.tracking-view-items__item:last-child) {
+  border-right: 2px solid grey;
+
+  flex-basis: 200px;
+}
+
+.items-inf-item {
+  border-right: 2px solid grey;
+  padding-left: 30px;
+
+  width: 25%;
+
+}
+
+.items-inf-item:last-child {
+  border-right: none;
+}
+
+.items-inf {
+  width: 100%;
+
+  display: flex;
+}
+
+.items-inf-item__label {
+  font-family: 'Rubik';
+  font-size: 10px;
+  font-weight: 300;
+
+  margin: 0;
+}
+
+.items-inf-item__value {
+  font-family: 'Rubik';
+  font-weight: 700;
+
+  margin: 0;
+}
