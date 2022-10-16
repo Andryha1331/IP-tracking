@@ -69,6 +69,8 @@ body {
 }
 
 .tracking-inputip-arrow {
+  display: inline-block;
+
   width: 8%;
   height: 100%;
 
