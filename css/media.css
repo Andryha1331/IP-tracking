@@ -17,16 +17,19 @@
 	}
 
 	.tracking-view {
-		width: 90%;
+		width: 88%;
 		height: 220px;
 	}
 
 	.tracking-search-container {
-		max-width: 400px;
+		width: 90%;
+
+		position: relative;
+		left: 3px;
 	}
 
 	.tracking-inputip {
-		width: 307px;
+		width: 90%;
 	}
 
 	.tracking-label {
