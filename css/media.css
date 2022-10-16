@@ -1,1 +1,35 @@
-@media screen and (max-width: 1450px) {}
+@media screen and (max-width: 1000px) {
+	.items-inf {
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.tracking-view {
+		max-width: 400px;
+	}
+
+	.items-inf-item {
+		border: none;
+		padding: 0;
+
+		width: 100%;
+		text-align: center;
+	}
+
+	.tracking-view {
+		width: 90%;
+		height: 220px;
+	}
+
+	.tracking-search-container {
+		max-width: 400px;
+	}
+
+	.tracking-inputip {
+		width: 307px;
+	}
+
+	.tracking-label {
+		font-size: x-large;
+	}
+}
