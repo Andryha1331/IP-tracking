@@ -60,10 +60,9 @@
       </script>
 
     <script>
+      const URL = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_DVj0u0PpoLuPPm9hlM9if7OwIsZVY';
       const MAXLENGTHISP = 30;
-      const CHARACTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", ""];
-
-      const url = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_DVj0u0PpoLuPPm9hlM9if7OwIsZVY';
+      
       const map = L.map('map', {
         zoomControl: false,
       });
@@ -73,38 +72,24 @@
         iconSize: [25, 34],
       });
 
-      function locationByIp(url) {
-        const getIP = fetch(url);
-
-        getIP
+      function locationByIp(url = URL) {
+        fetch(url)
           .then(
-            result => {
-              const getIpJson = result.json();
-              return getIpJson;
-            },
-            error => {
-              return alert("Rejected: " + error);
+            async result => {
+              const data = await result.json();
+              return result.ok ? data : alert(`Rejected: ${data.messages}`);
             }
           ).then(
             getIpJson => {
-              const currentIp = getIpJson.ip;
-              const lat = getIpJson.location.lat;
-              const lng = getIpJson.location.lng;
-              const location = getIpJson.location.city + ', ' + getIpJson.location.country + ' ' + getIpJson.location.postalCode;
-              const timeZone = 'UTC ' + getIpJson.location.timezone;
-              const isp = getIpJson.isp;
+              const { ip, isp, location: { lng, lat, timezone, city, postalCode, country } } = getIpJson;
 
-              const viewIp = document.querySelector('.tracking-inputip');
-              viewIp.placeholder = currentIp;
+              const timezoneText = `UTC ${timezone}`;
+              const locationText = `${city}, ${country} ${postalCode}`;
 
-              const itemIP = document.querySelector('.items-inf-item__valueIP');
-              itemIP.innerHTML = currentIp;
-
-              const itemLoc = document.querySelector('.items-inf-item__valueLoc');
-              itemLoc.innerHTML = location;
-
-              const itemTime = document.querySelector('.items-inf-item__valuetime');
-              itemTime.innerHTML = timeZone;
+              document.querySelector('.tracking-inputip').placeholder = ip;
+              document.querySelector('.items-inf-item__valueIP').innerHTML = ip;
+              document.querySelector('.items-inf-item__valueLoc').innerHTML = locationText;
+              document.querySelector('.items-inf-item__valuetime').innerHTML = timezoneText;
 
               if (isp.length > MAXLENGTHISP) {
                 document.querySelector('.items-inf-item__valueisp').style = "font-size: 10px";
@@ -112,8 +97,7 @@
                 document.querySelector('.items-inf-item__valueisp').style = "font-size: 18px";
               }
 
-              const itemISP = document.querySelector('.items-inf-item__valueisp');
-              itemISP.innerHTML = isp;
+              document.querySelector('.items-inf-item__valueisp').innerHTML = isp;
 
               map.setView([lat, lng], 13);
 
@@ -129,23 +113,19 @@
           )
       }
 
-      locationByIp(url);
+      locationByIp();
 
       document.querySelector('.tracking-inputip-arrow').addEventListener('click', event => {
+        const reg = new RegExp('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$');
         const currentIp = document.querySelector('.tracking-inputip').value;
-        const characterCount = currentIp.length;
 
-        for (let i = 0; i <= characterCount; i++) {
-          let valueTemp = currentIp.substr(i, 1);
-
-          if (!CHARACTERS.includes(valueTemp)) {
-            return alert('Enter only numbers for IP address!');
-          }
+        const isValid = reg.test(currentIp);
+        
+        if (!isValid) {
+          return alert('Enter only numbers for IP address!');
         }
 
-        const url = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_DVj0u0PpoLuPPm9hlM9if7OwIsZVY&ipAddress=' + currentIp;
-
-        locationByIp(url);
+        locationByIp(`${URL}&ipAddress=${currentIp}`);
       });
 
     </script>
